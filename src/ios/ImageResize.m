@@ -190,7 +190,13 @@
         NSError *error = nil;
         bool written = [imageDataObject writeToFile:fullFileName options:NSDataWritingAtomic error:&error];
         if (!written) {
-        	  NSLog(@"Write returned error: %@", [error localizedDescription]);
+            NSLog(@"Write returned error: %@", [error localizedDescription]);
+            UIAlertView *alertErrorWrite = [[UIAlertView alloc] initWithTitle:@"ERROR"
+                                                            message:[error localizedDescription]
+                                                            delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alertErrorWrite show];
         }
         return written;
     }
