@@ -125,7 +125,7 @@
     if([imageDataType isEqualToString:@"base64Image"]==YES) {
         img = [[UIImage alloc] initWithData:[NSData dataWithBase64EncodedString:imageData]];
     } else {
-        img = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:imageData]]];
+        img = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageData]]];
     }
     return img;
 }
@@ -171,16 +171,24 @@
         
         NSMutableString* fullFileName;
         if (![directory isEqualToString:@""]) {
+            // In case the path starts with file:///, removes the protocole and only leaves the 1st slash.
+            if ([directory hasPrefix:@"file:///"]) {
+                // 7 not 8, keeps the 1st /.
+                directory = [directory substringFromIndex:7];
+            }
             fullFileName = [NSMutableString stringWithString: directory];
             if (![[NSFileManager defaultManager] fileExistsAtPath:fullFileName]) {
                 NSError *error = nil;
-                [[NSFileManager defaultManager] createDirectoryAtPath:fullFileName withIntermediateDirectories:NO attributes:nil error:&error];
+                NSURL *fullFileNameNSURL = [NSURL fileURLWithPath:fullFileName isDirectory:YES];
+                [[NSFileManager defaultManager] createDirectoryAtURL:fullFileNameNSURL withIntermediateDirectories:YES attributes:nil error:&error];
             }
         } else {
             fullFileName = [NSMutableString stringWithString: documentsDirectory];
         }
 
-        [fullFileName appendString:@"/"];
+        if (![fullFileName hasSuffix:@"/"]) {
+            [fullFileName appendString:@"/"];
+        }
         [fullFileName appendString:filename];
         NSRange r = [filename rangeOfString:format options:NSCaseInsensitiveSearch];
         if (r.location == NSNotFound) {
@@ -191,12 +199,6 @@
         bool written = [imageDataObject writeToFile:fullFileName options:NSDataWritingAtomic error:&error];
         if (!written) {
             NSLog(@"Write returned error: %@", [error localizedDescription]);
-            UIAlertView *alertErrorWrite = [[UIAlertView alloc] initWithTitle:@"ERROR"
-                                                            message:[error localizedDescription]
-                                                            delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alertErrorWrite show];
         }
         return written;
     }
