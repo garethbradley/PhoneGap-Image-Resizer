@@ -54,14 +54,14 @@ ImageResizer.prototype.resizeImage = function(success, fail, imageData, width, h
         width: width ? width : 0,
         height: height ? height : 0,
         format: options.format ? options.format : ImageResizer.FORMAT_JPG,
-        imageDataType: options.imageDataType ? options.imageDataType : ImageResizer.IMAGE_DATA_TYPE_URL,
+        imageDataType: options.imageType ? options.imageDataType : ImageResizer.IMAGE_DATA_TYPE_URL,
         resizeType: options.resizeType ? options.resizeType : ImageResizer.RESIZE_TYPE_MAX_PIXEL,
         quality: options.quality ? options.quality : 75,
-        storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : 0,
-        pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : 1,
+        storeImage: (typeof options.storeImage !== "undefined") ? options.storeImage : false,
+        pixelDensity: (typeof options.pixelDensity !== "undefined") ? options.pixelDensity : true,
         directory: options.directory ? options.directory : "",
         filename: options.filename ? options.filename : "",
-        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : 0
+        photoAlbum: (typeof options.photoAlbum !== "undefined") ? options.photoAlbum : false
     };
 
 	if (params.filename && params.filename.indexOf('.') > -1) {
