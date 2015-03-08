@@ -90,6 +90,8 @@ public class ImageResizePlugin extends CordovaPlugin {
             if (params.has("format")) {
                 format = params.getString("format");
             }
+            
+            Log.d("PLUGIN", "imageDataType: " + imageDataType);
         }
         
         protected Bitmap getBitmap(String imageData, String imageDataType, BitmapFactory.Options options) throws IOException, URISyntaxException {
